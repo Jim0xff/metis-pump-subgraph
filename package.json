@@ -1,0 +1,11 @@
+{
+    "name": "metis-pump-subgraph",
+    "license": "UNLICENSED",
+    "dependencies": {
+        "@graphprotocol/graph-cli": "0.59.0",
+        "@graphprotocol/graph-ts": "0.31.0",
+        "ethers": "^5.6.2",
+        "yaml": "^2.2.1",
+        "mustache": "^4.2.0"
+    }
+}
