@@ -1,5 +1,5 @@
 {
-  "sepolia": {
+  "mainnet": {
     "TokenFactory": {
       "address": "0x475C540636E57b6f8db805edeC6Bb6c261F23f28",
       "startBlock": 1000000

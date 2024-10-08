@@ -1,107 +1,126 @@
 import {
-  CloseStream as CloseStreamEvent,
-  Deposit as DepositEvent,
-  ExecuteTransaction as ExecuteTransactionEvent,
-  OpenStream as OpenStreamEvent,
-  Owner as OwnerEvent,
-  Withdraw as WithdrawEvent
+  BuyToken as BuyTokenEvent,
+  Initialized as InitializedEvent,
+  RecoverErc20 as RecoverErc20Event,
+  SellToken as SellTokenEvent,
+  TokenCreated as TokenCreatedEvent,
+  TokenLiqudityAdded as TokenLiqudityAddedEvent
 } from "../generated/TokenFactory/TokenFactory"
 import {
-  CloseStream,
-  Deposit,
-  ExecuteTransaction,
-  OpenStream,
-  Owner,
-  Withdraw
+  Token,
+  Transaction,
+  UserTokenBalance,
 } from "../generated/schema"
 
-export function handleCloseStream(event: CloseStreamEvent): void {
-  let entity = new CloseStream(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.to = event.params.to
+import { BigInt, Bytes } from "@graphprotocol/graph-ts";
 
+export function handleTokenCreated(event: TokenCreatedEvent): void {
+  let entity = new Token(
+     event.params.token.toHexString()
+  )
+  entity.totalSupply = BigInt.fromString("1000000000000000000000000000")
+  entity.remainSupply = BigInt.fromString("800000000000000000000000000")
+  entity.fundingGoal = BigInt.fromString("800000000000000000000000000")
+  entity.name = event.params.tokenName
+  entity.symbol = event.params.tokenSymbol
+  entity.description = event.params.description
+  entity.imgUrl = event.params.imgUrl
+  entity.status = 'FUNDING'
+  entity.creator = event.params.creator.toHexString()
+  entity.collateral = BigInt.fromString("0")
   entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
+  entity.createTimestamp = event.block.timestamp
+  entity.updateTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
 
   entity.save()
 }
 
-export function handleDeposit(event: DepositEvent): void {
-  let entity = new Deposit(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
+export function handleBuyToken(event: BuyTokenEvent): void {
+  let entity = new Transaction(
+    event.transaction.hash.toHexString()
   )
-  entity.sender = event.params.sender
-  entity.amount = event.params.amount
-  entity.balance = event.params.balance
+
+  entity.type = 'BUY'
+  entity.user = event.params.buyer.toHexString()
+  entity.token = event.params.token.toHexString()
+  entity.tokenName = event.params.tokenName
+  entity.tokenAmount = event.params.tokenAmount
+  entity.metisAmount = event.params.metisAmount
 
   entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
+  entity.createTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
 
   entity.save()
+
+  let userBalanceEntity = UserTokenBalance.load(event.params.token.toHexString()+ "_" + event.params.buyer.toHexString())
+  if(userBalanceEntity == null){
+    userBalanceEntity = new UserTokenBalance(event.params.token.toHexString()+ "_" + event.params.buyer.toHexString())
+    userBalanceEntity.user = event.params.buyer.toHexString()
+    userBalanceEntity.token = event.params.token.toHexString()
+    userBalanceEntity.tokenName = event.params.tokenName
+    userBalanceEntity.createTimestamp = event.block.timestamp
+    userBalanceEntity.tokenAmount = BigInt.fromString("0")
+  }
+
+  userBalanceEntity.tokenAmount = userBalanceEntity.tokenAmount.plus(event.params.tokenAmount)
+  userBalanceEntity.updateTimestamp = event.block.timestamp
+  userBalanceEntity.save();
+
+  let tokenEntity = Token.load(event.params.token.toHexString())
+  if(tokenEntity != null){
+    tokenEntity.remainSupply = tokenEntity.remainSupply.minus(event.params.tokenAmount)
+    tokenEntity.blockNumber = event.block.number
+    tokenEntity.updateTimestamp = event.block.timestamp
+    tokenEntity.transactionHash = event.transaction.hash
+    tokenEntity.collateral = event.params.collateral
+    tokenEntity.save();
+  }
 }
 
-export function handleExecuteTransaction(event: ExecuteTransactionEvent): void {
-  let entity = new ExecuteTransaction(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
+export function handleSellToken(event: SellTokenEvent): void {
+  let entity = new Transaction(
+    event.transaction.hash.toHexString()
   )
-  entity.owner = event.params.owner
-  entity.to = event.params.to
-  entity.value = event.params.value
-  entity.data = event.params.data
-  entity.nonce = event.params.nonce
-  entity.hash = event.params.hash
-  entity.result = event.params.result
+
+  entity.type = 'SELL'
+  entity.user = event.params.seller.toHexString()
+  entity.token = event.params.token.toHexString()
+  entity.tokenName = event.params.tokenName
+  entity.tokenAmount = event.params.tokenAmount
+  entity.metisAmount = event.params.metisAmount
 
   entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
+  entity.createTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
 
   entity.save()
+
+  let userBalanceEntity = UserTokenBalance.load(event.params.token.toHexString()+ "_" + event.params.seller.toHexString())
+  if(userBalanceEntity != null){
+    userBalanceEntity.tokenAmount = userBalanceEntity.tokenAmount.minus(event.params.tokenAmount)
+    userBalanceEntity.updateTimestamp = event.block.timestamp
+    userBalanceEntity.save();
+  }
+  let tokenEntity = Token.load(event.params.token.toHexString())
+  if(tokenEntity != null){
+    tokenEntity.remainSupply = tokenEntity.remainSupply.plus(event.params.tokenAmount)
+    tokenEntity.blockNumber = event.block.number
+    tokenEntity.updateTimestamp = event.block.timestamp
+    tokenEntity.transactionHash = event.transaction.hash
+    tokenEntity.collateral = event.params.collateral
+    tokenEntity.save();
+  }
 }
 
-export function handleOpenStream(event: OpenStreamEvent): void {
-  let entity = new OpenStream(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.to = event.params.to
-  entity.amount = event.params.amount
-  entity.frequency = event.params.frequency
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleOwner(event: OwnerEvent): void {
-  let entity = new Owner(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.owner = event.params.owner
-  entity.added = event.params.added
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleWithdraw(event: WithdrawEvent): void {
-  let entity = new Withdraw(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.to = event.params.to
-  entity.amount = event.params.amount
-  entity.reason = event.params.reason
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+export function handleTokenLiqudityAdded(event: TokenLiqudityAddedEvent): void {
+  let entity = Token.load(event.params.token.toHexString())
+  if(entity != null){
+    entity.status = 'TRADING'
+    entity.blockNumber = event.block.number
+    entity.updateTimestamp = event.block.timestamp
+    entity.transactionHash = event.transaction.hash
+    entity.save()
+  }
 }

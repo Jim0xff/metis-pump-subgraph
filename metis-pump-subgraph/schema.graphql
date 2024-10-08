@@ -1,60 +1,43 @@
-type CloseStream @entity(immutable: true) {
-  id: Bytes!
-  to: Bytes! # address
+type Token @entity{
+  id: ID! #address
+  totalSupply: BigInt! # uint256
+  remainSupply: BigInt! # uint256
+  fundingGoal: BigInt! # uint256
+  name: String!
+  symbol: String
+  description: String
+  imgUrl: String!
+  status: String!
+  creator: String!
+  
+  collateral: BigInt!
   blockNumber: BigInt!
-  blockTimestamp: BigInt!
+  createTimestamp: BigInt!
+  updateTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type Deposit @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  amount: BigInt! # uint256
-  balance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type Transaction @entity{
+     id: ID!
+     type: String!
+     user: String!
+     token: String!
+     tokenName: String!
+     tokenAmount: BigInt!
+     metisAmount: BigInt!
+
+     blockNumber: BigInt!
+     createTimestamp: BigInt!
+     transactionHash: Bytes!
 }
 
-type ExecuteTransaction @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  to: Bytes! # address
-  value: BigInt! # uint256
-  data: Bytes! # bytes
-  nonce: BigInt! # uint256
-  hash: Bytes! # bytes32
-  result: Bytes! # bytes
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
+type UserTokenBalance @entity{
+  id: ID! # userId contact tokenId
+  user: String!
+  token: String!
+  tokenName: String!
+  tokenAmount: BigInt!
 
-type OpenStream @entity(immutable: true) {
-  id: Bytes!
-  to: Bytes! # address
-  amount: BigInt! # uint256
-  frequency: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Owner @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  added: Boolean! # bool
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Withdraw @entity(immutable: true) {
-  id: Bytes!
-  to: Bytes! # address
-  amount: BigInt! # uint256
-  reason: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+  createTimestamp: BigInt!
+  updateTimestamp: BigInt!
 }

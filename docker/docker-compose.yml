@@ -1,0 +1,62 @@
+version: '3'
+services:
+  graph-node:
+    image: graphprotocol/graph-node:v0.35.1
+    ports:
+      - '8000:8000'
+      - '8002:8001'
+      - '8020:8020'
+      - '8030:8030'
+      - '8040:8040'
+    depends_on:
+      - ipfs
+      - postgres
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    environment:
+      ipfs: 'ipfs:5001'
+      # ethereum: 'mainnet:http://host.docker.internal:8545'
+      #ethereum: 'https://metis-pokt.nodies.app'
+      ethereum: 'mainnet:https://sepolia.metisdevops.link'
+      # ethereum: 'mainnet:https://sepolia.infura.io/v3/11a6f3878d804145b1276f405300e457'
+      #GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER: 976812
+      # GRAPH_START_BLOCK: 1000000
+      GRAPH_LOG: debug
+      DISABLE_BLOCK_INGESTOR: true
+      GRAPH_ETHEREUM_CLEANUP_BLOCKS: true
+      GRAPH_NODE_CONFIG: './node.toml'
+      BLOCK_INGESTOR: "index_node"
+      node_id: "index_node"
+    volumes:
+      - ./node.toml:/node.toml
+  ipfs:
+    image: ipfs/go-ipfs:v0.10.0
+    ports:
+      - '5001:5001'
+    volumes:
+      - ./data/ipfs:/data/ipfs
+  postgres:
+    image: postgres:14
+    user: "postgres"
+    ports:
+      - '5432:5432'
+    command:
+      [
+        "postgres",
+        "-cshared_preload_libraries=pg_stat_statements",
+        "-cwal_level=logical",
+        "-clogging_collector=on",
+        "-clog_statement=all",
+        "-clog_directory=/var/lib/postgresql/data",
+        "-clog_filename=postgresql.log"
+      ]
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: let-me-in
+      POSTGRES_DB: subgraph
+      PGDATA: "/var/lib/postgresql/data"
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
+#    network_mode: "host"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql

@@ -1,0 +1,31 @@
+# Compiler files
+cache/
+out/
+
+# Docs
+docs/
+
+# Dotenv file
+.env
+
+dependencies/
+node_modules
+
+
+.DS_Store
+
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+
+# Hardhat files
+cache
+artifacts
+
+docker/data/
+
+metis-pump-subgraph/node_modules
+metis-pump-subgraph/build
+metis-pump-subgraph/generated

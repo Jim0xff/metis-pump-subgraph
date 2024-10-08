@@ -1,10 +1,10 @@
-specVersion: 0.0.5
+specVersion: 0.0.7
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
     name: TokenFactory
-    network: sepolia
+    network: mainnet
     source:
       address: "0x475C540636E57b6f8db805edeC6Bb6c261F23f28"
       abi: TokenFactory
@@ -14,26 +14,20 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - CloseStream
-        - Deposit
-        - ExecuteTransaction
-        - OpenStream
-        - Owner
-        - Withdraw
+        - Token
+        - Transaction
+        - UserTokenBalance
       abis:
         - name: TokenFactory
           file: ./abis/TokenFactory.json
       eventHandlers:
-        - event: CloseStream(indexed address)
-          handler: handleCloseStream
-        - event: Deposit(indexed address,uint256,uint256)
-          handler: handleDeposit
-        - event: ExecuteTransaction(indexed address,address,uint256,bytes,uint256,bytes32,bytes)
-          handler: handleExecuteTransaction
-        - event: OpenStream(indexed address,uint256,uint256)
-          handler: handleOpenStream
-        - event: Owner(indexed address,bool)
-          handler: handleOwner
-        - event: Withdraw(indexed address,uint256,string)
-          handler: handleWithdraw
+        - event: TokenCreated(indexed address,string,string,indexed address,string,string,uint256)
+          handler: handleTokenCreated
+        - event: TokenLiqudityAdded(indexed address,indexed address,indexed uint256,uint256)
+          handler: handleTokenLiqudityAdded
+        - event: BuyToken(indexed uint256,indexed address,indexed address,uint256,uint256,string,uint256)
+          handler: handleBuyToken
+        - event: SellToken(indexed uint256,indexed address,indexed address,uint256,uint256,string,uint256)
+          handler: handleSellToken
       file: ./src/token-factory.ts
+
