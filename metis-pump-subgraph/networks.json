@@ -1,7 +1,7 @@
 {
   "mainnet": {
     "TokenFactory": {
-      "address": "0x475C540636E57b6f8db805edeC6Bb6c261F23f28",
+      "address": "0xe8385f3115f2aa17b1AB5B54508a41b834f7787b",
       "startBlock": 1000000
     }
   }

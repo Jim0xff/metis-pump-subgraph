@@ -6,9 +6,9 @@ dataSources:
     name: TokenFactory
     network: mainnet
     source:
-      address: "0x475C540636E57b6f8db805edeC6Bb6c261F23f28"
+      address: "0xe8385f3115f2aa17b1AB5B54508a41b834f7787b"
       abi: TokenFactory
-      startBlock: 1000000
+      startBlock: 1200000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -17,11 +17,12 @@ dataSources:
         - Token
         - Transaction
         - UserTokenBalance
+        - UserMeMeTokenBalance
       abis:
         - name: TokenFactory
           file: ./abis/TokenFactory.json
       eventHandlers:
-        - event: TokenCreated(indexed address,string,string,indexed address,string,string,uint256)
+        - event: TokenCreated(indexed address,string,string,indexed address,string,string,uint256,address)
           handler: handleTokenCreated
         - event: TokenLiqudityAdded(indexed address,indexed address,indexed uint256,uint256)
           handler: handleTokenLiqudityAdded
@@ -30,4 +31,24 @@ dataSources:
         - event: SellToken(indexed uint256,indexed address,indexed address,uint256,uint256,string,uint256)
           handler: handleSellToken
       file: ./src/token-factory.ts
+  - kind: ethereum
+    name: Token
+    network: mainnet
+    source:
+      abi: Token
+      startBlock: 1200000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - UserMeMeTokenBalance
+        - UserMeMeTokenTransaction
+      abis:
+        - name: Token
+          file: ./abis/Token.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleERC20Transfer
+      file: ./src/token.ts    
 

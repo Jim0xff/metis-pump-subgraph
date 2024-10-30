@@ -4,6 +4,7 @@ type Token @entity{
   remainSupply: BigInt! # uint256
   fundingGoal: BigInt! # uint256
   name: String!
+  nameLowercase: String! 
   symbol: String
   description: String
   imgUrl: String!
@@ -40,4 +41,27 @@ type UserTokenBalance @entity{
 
   createTimestamp: BigInt!
   updateTimestamp: BigInt!
+}
+
+type UserMeMeTokenBalance @entity{
+  id: ID! # userId contact tokenId
+  user: String!
+  token: String!
+  tokenName: String
+  tokenAmount: BigInt!
+
+  createTimestamp: BigInt!
+  updateTimestamp: BigInt!
+}
+
+type UserMeMeTokenTransaction @entity{
+     id: ID!
+     from: String!
+     to: String!
+     token: String!
+     tokenAmount: BigInt!
+
+     blockNumber: BigInt
+     createTimestamp: BigInt!
+     transactionHash: Bytes
 }

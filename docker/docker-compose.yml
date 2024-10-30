@@ -19,11 +19,7 @@ services:
       #ethereum: 'https://metis-pokt.nodies.app'
       ethereum: 'mainnet:https://sepolia.metisdevops.link'
       # ethereum: 'mainnet:https://sepolia.infura.io/v3/11a6f3878d804145b1276f405300e457'
-      #GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER: 976812
-      # GRAPH_START_BLOCK: 1000000
       GRAPH_LOG: debug
-      DISABLE_BLOCK_INGESTOR: true
-      GRAPH_ETHEREUM_CLEANUP_BLOCKS: true
       GRAPH_NODE_CONFIG: './node.toml'
       BLOCK_INGESTOR: "index_node"
       node_id: "index_node"

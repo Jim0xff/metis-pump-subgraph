@@ -10,6 +10,7 @@ import {
   Token,
   Transaction,
   UserTokenBalance,
+  UserMeMeTokenBalance,
 } from "../generated/schema"
 
 import { BigInt, Bytes } from "@graphprotocol/graph-ts";
@@ -22,6 +23,7 @@ export function handleTokenCreated(event: TokenCreatedEvent): void {
   entity.remainSupply = BigInt.fromString("800000000000000000000000000")
   entity.fundingGoal = BigInt.fromString("800000000000000000000000000")
   entity.name = event.params.tokenName
+  entity.nameLowercase = event.params.tokenName.toLowerCase();
   entity.symbol = event.params.tokenSymbol
   entity.description = event.params.description
   entity.imgUrl = event.params.imgUrl
@@ -32,8 +34,17 @@ export function handleTokenCreated(event: TokenCreatedEvent): void {
   entity.createTimestamp = event.block.timestamp
   entity.updateTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
-
   entity.save()
+
+  let userMeMeTokenBalanceEntity = new UserMeMeTokenBalance(event.params.token.toHexString() + "_" + event.address.toHexString())
+  
+  userMeMeTokenBalanceEntity.user = event.address.toHexString()
+  userMeMeTokenBalanceEntity.token = event.params.token.toHexString()
+  userMeMeTokenBalanceEntity.tokenName = event.params.tokenName
+  userMeMeTokenBalanceEntity.tokenAmount = BigInt.fromString("1000000000000000000000000000")
+  userMeMeTokenBalanceEntity.createTimestamp = event.block.timestamp
+  userMeMeTokenBalanceEntity.updateTimestamp = event.block.timestamp
+  userMeMeTokenBalanceEntity.save()
 }
 
 export function handleBuyToken(event: BuyTokenEvent): void {
