@@ -34,6 +34,8 @@ export function handleTokenCreated(event: TokenCreatedEvent): void {
   entity.createTimestamp = event.block.timestamp
   entity.updateTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
+  entity.nowPrice = event.params.tokenNowPrice
+  entity.currencyAddress = event.params.currencyAddress.toHexString()
   entity.save()
 
   let userMeMeTokenBalanceEntity = new UserMeMeTokenBalance(event.params.token.toHexString() + "_" + event.address.toHexString())
@@ -81,6 +83,7 @@ export function handleBuyToken(event: BuyTokenEvent): void {
 
   let tokenEntity = Token.load(event.params.token.toHexString())
   if(tokenEntity != null){
+    tokenEntity.nowPrice = event.params.tokenNowPrice
     tokenEntity.remainSupply = tokenEntity.remainSupply.minus(event.params.tokenAmount)
     tokenEntity.blockNumber = event.block.number
     tokenEntity.updateTimestamp = event.block.timestamp
@@ -116,6 +119,7 @@ export function handleSellToken(event: SellTokenEvent): void {
   }
   let tokenEntity = Token.load(event.params.token.toHexString())
   if(tokenEntity != null){
+    tokenEntity.nowPrice = event.params.tokenNowPrice
     tokenEntity.remainSupply = tokenEntity.remainSupply.plus(event.params.tokenAmount)
     tokenEntity.blockNumber = event.block.number
     tokenEntity.updateTimestamp = event.block.timestamp
@@ -132,6 +136,7 @@ export function handleTokenLiqudityAdded(event: TokenLiqudityAddedEvent): void {
     entity.blockNumber = event.block.number
     entity.updateTimestamp = event.block.timestamp
     entity.transactionHash = event.transaction.hash
+    entity.pairAddress = event.params.lpToken.toHexString()
     entity.save()
   }
 }

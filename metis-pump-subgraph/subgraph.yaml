@@ -22,13 +22,13 @@ dataSources:
         - name: TokenFactory
           file: ./abis/TokenFactory.json
       eventHandlers:
-        - event: TokenCreated(indexed address,string,string,indexed address,string,string,uint256,address)
+        - event: TokenCreated(indexed address,string,string,indexed address,string,string,uint256,uint256,address)
           handler: handleTokenCreated
         - event: TokenLiqudityAdded(indexed address,indexed address,indexed uint256,uint256)
           handler: handleTokenLiqudityAdded
-        - event: BuyToken(indexed uint256,indexed address,indexed address,uint256,uint256,string,uint256)
+        - event: BuyToken(indexed uint256,indexed address,indexed address,uint256,uint256,string,uint256,uint256)
           handler: handleBuyToken
-        - event: SellToken(indexed uint256,indexed address,indexed address,uint256,uint256,string,uint256)
+        - event: SellToken(indexed uint256,indexed address,indexed address,uint256,uint256,string,uint256,uint256)
           handler: handleSellToken
       file: ./src/token-factory.ts
   - kind: ethereum

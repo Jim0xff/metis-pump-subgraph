@@ -10,8 +10,10 @@ type Token @entity{
   imgUrl: String!
   status: String!
   creator: String!
-  
+  currencyAddress: String!
+  pairAddress: String
   collateral: BigInt!
+  nowPrice: BigInt
   blockNumber: BigInt!
   createTimestamp: BigInt!
   updateTimestamp: BigInt!
