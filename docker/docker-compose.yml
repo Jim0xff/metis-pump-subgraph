@@ -32,7 +32,7 @@ services:
     volumes:
       - ./data/ipfs:/data/ipfs
   postgres:
-    image: postgres:12
+    image: postgres:14
     user: "postgres"
     ports:
       - '5432:5432'
