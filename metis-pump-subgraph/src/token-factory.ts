@@ -60,7 +60,7 @@ export function handleBuyToken(event: BuyTokenEvent): void {
   entity.tokenName = event.params.tokenName
   entity.tokenAmount = event.params.tokenAmount
   entity.metisAmount = event.params.metisAmount
-
+  entity.tokenPrice = event.params.tokenNowPrice
   entity.blockNumber = event.block.number
   entity.createTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
@@ -104,7 +104,7 @@ export function handleSellToken(event: SellTokenEvent): void {
   entity.tokenName = event.params.tokenName
   entity.tokenAmount = event.params.tokenAmount
   entity.metisAmount = event.params.metisAmount
-
+  entity.tokenPrice = event.params.tokenNowPrice
   entity.blockNumber = event.block.number
   entity.createTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash

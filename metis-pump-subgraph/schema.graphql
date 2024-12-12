@@ -28,7 +28,7 @@ type Transaction @entity{
      tokenName: String!
      tokenAmount: BigInt!
      metisAmount: BigInt!
-
+     tokenPrice:BigInt!
      blockNumber: BigInt!
      createTimestamp: BigInt!
      transactionHash: Bytes!
