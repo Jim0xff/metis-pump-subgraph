@@ -11,9 +11,11 @@ import {
   Transaction,
   UserTokenBalance,
   UserMeMeTokenBalance,
+  LpToken,
+  TokenPriceChangeLog
 } from "../generated/schema"
 
-import { BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts";
 
 export function handleTokenCreated(event: TokenCreatedEvent): void {
   let entity = new Token(
@@ -60,7 +62,17 @@ export function handleBuyToken(event: BuyTokenEvent): void {
   entity.tokenName = event.params.tokenName
   entity.tokenAmount = event.params.tokenAmount
   entity.metisAmount = event.params.metisAmount
-  entity.tokenPrice = event.params.tokenNowPrice
+  let tokenAmount:BigDecimal = BigDecimal.fromString(entity.tokenAmount.toString())
+  let currencyAmount:BigDecimal = BigDecimal.fromString(entity.metisAmount.toString())
+  const tenToEighteen:BigDecimal = BigDecimal.fromString(Math.pow(10, 18).toString());
+  let tokenPriceC = event.params.tokenNowPrice
+  if(!tokenAmount.equals(BigDecimal.fromString('0'))){
+    let price:BigDecimal = currencyAmount.div(tokenAmount).times(tenToEighteen)
+    const integerPart = price.toString().split('.')[0]; // 去掉小数部分
+    tokenPriceC = BigInt.fromString(integerPart);
+  }
+  entity.tokenPrice = tokenPriceC
+
   entity.blockNumber = event.block.number
   entity.createTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
@@ -91,6 +103,16 @@ export function handleBuyToken(event: BuyTokenEvent): void {
     tokenEntity.collateral = event.params.collateral
     tokenEntity.save();
   }
+
+  let changeLogEntity = new TokenPriceChangeLog(event.transaction.hash.toHexString())
+  changeLogEntity.token = event.params.token.toHexString()
+  changeLogEntity.type = "boundingCurve"
+  changeLogEntity.tokenPrice = tokenPriceC
+  changeLogEntity.createTimestamp = event.block.timestamp
+  changeLogEntity.blockNumber = event.block.number
+  changeLogEntity.transactionHash = event.transaction.hash
+
+  changeLogEntity.save()
 }
 
 export function handleSellToken(event: SellTokenEvent): void {
@@ -104,7 +126,16 @@ export function handleSellToken(event: SellTokenEvent): void {
   entity.tokenName = event.params.tokenName
   entity.tokenAmount = event.params.tokenAmount
   entity.metisAmount = event.params.metisAmount
-  entity.tokenPrice = event.params.tokenNowPrice
+  let tokenAmount:BigDecimal = BigDecimal.fromString(entity.tokenAmount.toString())
+  let currencyAmount:BigDecimal = BigDecimal.fromString(entity.metisAmount.toString())
+  const tenToEighteen:BigDecimal = BigDecimal.fromString(Math.pow(10, 18).toString());
+  let tokenPriceC = event.params.tokenNowPrice
+  if(!tokenAmount.equals(BigDecimal.fromString('0'))){
+    let price:BigDecimal = currencyAmount.div(tokenAmount).times(tenToEighteen)
+    const integerPart = price.toString().split('.')[0]; // 去掉小数部分
+    tokenPriceC = BigInt.fromString(integerPart);
+  }
+  entity.tokenPrice = tokenPriceC
   entity.blockNumber = event.block.number
   entity.createTimestamp = event.block.timestamp
   entity.transactionHash = event.transaction.hash
@@ -127,6 +158,15 @@ export function handleSellToken(event: SellTokenEvent): void {
     tokenEntity.collateral = event.params.collateral
     tokenEntity.save();
   }
+  let changeLogEntity = new TokenPriceChangeLog(event.transaction.hash.toHexString())
+  changeLogEntity.token = event.params.token.toHexString()
+  changeLogEntity.type = "boundingCurve"
+  changeLogEntity.tokenPrice = tokenPriceC
+  changeLogEntity.createTimestamp = event.block.timestamp
+  changeLogEntity.blockNumber = event.block.number
+  changeLogEntity.transactionHash = event.transaction.hash
+
+  changeLogEntity.save()
 }
 
 export function handleTokenLiqudityAdded(event: TokenLiqudityAddedEvent): void {
@@ -138,5 +178,17 @@ export function handleTokenLiqudityAdded(event: TokenLiqudityAddedEvent): void {
     entity.transactionHash = event.transaction.hash
     entity.pairAddress = event.params.lpToken.toHexString()
     entity.save()
+    let lpTokenEntity = LpToken.load(event.params.lpToken.toHexString())
+    if(lpTokenEntity == null){
+      lpTokenEntity = new LpToken(event.params.lpToken.toHexString())
+      lpTokenEntity.token = event.params.token.toHexString()
+      lpTokenEntity.currency = entity.currencyAddress
+      lpTokenEntity.blockNumber = event.block.number
+      lpTokenEntity.createTimestamp = event.block.timestamp
+      lpTokenEntity.updateTimestamp = event.block.timestamp
+      lpTokenEntity.transactionHash = event.transaction.hash
+      lpTokenEntity.save()
+    }
   }
+
 }

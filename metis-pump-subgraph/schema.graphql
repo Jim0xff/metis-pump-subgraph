@@ -20,6 +20,16 @@ type Token @entity{
   transactionHash: Bytes!
 }
 
+type LpToken @entity{
+  id: ID! #address
+  token: String! 
+  currency: String!
+  blockNumber: BigInt!
+  createTimestamp: BigInt!
+  updateTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 type Transaction @entity{
      id: ID!
      type: String!
@@ -29,6 +39,18 @@ type Transaction @entity{
      tokenAmount: BigInt!
      metisAmount: BigInt!
      tokenPrice:BigInt!
+     blockNumber: BigInt!
+     createTimestamp: BigInt!
+     transactionHash: Bytes!
+}
+
+type TokenPriceChangeLog @entity{
+     id: ID!
+     token: String!
+     tokenPrice:BigInt!
+     amount0:BigInt
+     amount1:BigInt
+     type:String!
      blockNumber: BigInt!
      createTimestamp: BigInt!
      transactionHash: Bytes!
