@@ -12,7 +12,6 @@ import {
   UserTokenBalance,
   UserMeMeTokenBalance,
   LpToken,
-  TokenPriceChangeLog
 } from "../generated/schema"
 
 import { BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts";
@@ -57,6 +56,7 @@ export function handleBuyToken(event: BuyTokenEvent): void {
   )
 
   entity.type = 'BUY'
+  entity.from = 'boundingCurve'
   entity.user = event.params.buyer.toHexString()
   entity.token = event.params.token.toHexString()
   entity.tokenName = event.params.tokenName
@@ -103,16 +103,6 @@ export function handleBuyToken(event: BuyTokenEvent): void {
     tokenEntity.collateral = event.params.collateral
     tokenEntity.save();
   }
-
-  let changeLogEntity = new TokenPriceChangeLog(event.transaction.hash.toHexString())
-  changeLogEntity.token = event.params.token.toHexString()
-  changeLogEntity.type = "boundingCurve"
-  changeLogEntity.tokenPrice = tokenPriceC
-  changeLogEntity.createTimestamp = event.block.timestamp
-  changeLogEntity.blockNumber = event.block.number
-  changeLogEntity.transactionHash = event.transaction.hash
-
-  changeLogEntity.save()
 }
 
 export function handleSellToken(event: SellTokenEvent): void {
@@ -121,6 +111,7 @@ export function handleSellToken(event: SellTokenEvent): void {
   )
 
   entity.type = 'SELL'
+  entity.from = 'boundingCurve'
   entity.user = event.params.seller.toHexString()
   entity.token = event.params.token.toHexString()
   entity.tokenName = event.params.tokenName
@@ -158,15 +149,6 @@ export function handleSellToken(event: SellTokenEvent): void {
     tokenEntity.collateral = event.params.collateral
     tokenEntity.save();
   }
-  let changeLogEntity = new TokenPriceChangeLog(event.transaction.hash.toHexString())
-  changeLogEntity.token = event.params.token.toHexString()
-  changeLogEntity.type = "boundingCurve"
-  changeLogEntity.tokenPrice = tokenPriceC
-  changeLogEntity.createTimestamp = event.block.timestamp
-  changeLogEntity.blockNumber = event.block.number
-  changeLogEntity.transactionHash = event.transaction.hash
-
-  changeLogEntity.save()
 }
 
 export function handleTokenLiqudityAdded(event: TokenLiqudityAddedEvent): void {

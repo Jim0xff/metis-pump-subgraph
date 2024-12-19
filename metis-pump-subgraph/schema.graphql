@@ -33,27 +33,16 @@ type LpToken @entity{
 type Transaction @entity{
      id: ID!
      type: String!
-     user: String!
+     user: String
      token: String!
-     tokenName: String!
+     tokenName: String
      tokenAmount: BigInt!
      metisAmount: BigInt!
      tokenPrice:BigInt!
      blockNumber: BigInt!
      createTimestamp: BigInt!
      transactionHash: Bytes!
-}
-
-type TokenPriceChangeLog @entity{
-     id: ID!
-     token: String!
-     tokenPrice:BigInt!
-     amount0:BigInt
-     amount1:BigInt
-     type:String!
-     blockNumber: BigInt!
-     createTimestamp: BigInt!
-     transactionHash: Bytes!
+     from: String
 }
 
 type UserTokenBalance @entity{

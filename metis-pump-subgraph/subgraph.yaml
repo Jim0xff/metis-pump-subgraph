@@ -18,7 +18,6 @@ dataSources:
         - Transaction
         - UserTokenBalance
         - UserMeMeTokenBalance
-        - TokenPriceChangeLog
         - LpToken
       abis:
         - name: TokenFactory
@@ -64,13 +63,13 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - TokenPriceChangeLog
         - LpToken
+        - Transaction
       abis:
         - name: NetswapPair
           file: ./abis/NetswapPair.json
       eventHandlers:
-        - event: Sync(uint112,uint112)
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
           handler: handleSync
       file: ./src/pair.ts
 
