@@ -66,11 +66,12 @@ export function handleBuyToken(event: BuyTokenEvent): void {
   let currencyAmount:BigDecimal = BigDecimal.fromString(entity.metisAmount.toString())
   const tenToEighteen:BigDecimal = BigDecimal.fromString(Math.pow(10, 18).toString());
   let tokenPriceC = event.params.tokenNowPrice
-  if(!tokenAmount.equals(BigDecimal.fromString('0'))){
-    let price:BigDecimal = currencyAmount.div(tokenAmount).times(tenToEighteen)
-    const integerPart = price.toString().split('.')[0]; // 去掉小数部分
-    tokenPriceC = BigInt.fromString(integerPart);
-  }
+  //直接取当前价格
+  // if(!tokenAmount.equals(BigDecimal.fromString('0'))){
+  //   let price:BigDecimal = currencyAmount.div(tokenAmount).times(tenToEighteen)
+  //   const integerPart = price.toString().split('.')[0]; // 去掉小数部分
+  //   tokenPriceC = BigInt.fromString(integerPart);
+  // }
   entity.tokenPrice = tokenPriceC
 
   entity.blockNumber = event.block.number
@@ -121,11 +122,11 @@ export function handleSellToken(event: SellTokenEvent): void {
   let currencyAmount:BigDecimal = BigDecimal.fromString(entity.metisAmount.toString())
   const tenToEighteen:BigDecimal = BigDecimal.fromString(Math.pow(10, 18).toString());
   let tokenPriceC = event.params.tokenNowPrice
-  if(!tokenAmount.equals(BigDecimal.fromString('0'))){
-    let price:BigDecimal = currencyAmount.div(tokenAmount).times(tenToEighteen)
-    const integerPart = price.toString().split('.')[0]; // 去掉小数部分
-    tokenPriceC = BigInt.fromString(integerPart);
-  }
+  // if(!tokenAmount.equals(BigDecimal.fromString('0'))){
+  //   let price:BigDecimal = currencyAmount.div(tokenAmount).times(tenToEighteen)
+  //   const integerPart = price.toString().split('.')[0]; // 去掉小数部分
+  //   tokenPriceC = BigInt.fromString(integerPart);
+  // }
   entity.tokenPrice = tokenPriceC
   entity.blockNumber = event.block.number
   entity.createTimestamp = event.block.timestamp
