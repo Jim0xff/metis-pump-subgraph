@@ -22,9 +22,9 @@ export function handleTokenCreated(event: TokenCreatedEvent): void {
   )
   entity.totalSupply = BigInt.fromString("1000000000000000000000000000")
   entity.remainSupply = BigInt.fromString("800000000000000000000000000")
-  entity.fundingGoal = BigInt.fromString("800000000000000000000000000")
+  entity.fundingGoal = event.params.timestamp
   entity.name = event.params.tokenName
-  entity.nameLowercase = event.params.tokenName.toLowerCase();
+  entity.nameLowercase = event.params.tokenName.toLowerCase()
   entity.symbol = event.params.tokenSymbol
   entity.description = event.params.description
   entity.imgUrl = event.params.imgUrl
