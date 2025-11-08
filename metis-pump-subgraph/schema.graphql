@@ -14,6 +14,8 @@ type Token @entity{
   pairAddress: String
   collateral: BigInt!
   nowPrice: BigInt
+  airdropRate:BigInt
+  sellAt:BigInt
   blockNumber: BigInt!
   createTimestamp: BigInt!
   updateTimestamp: BigInt!

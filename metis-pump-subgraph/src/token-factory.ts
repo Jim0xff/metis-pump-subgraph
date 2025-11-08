@@ -37,6 +37,8 @@ export function handleTokenCreated(event: TokenCreatedEvent): void {
   entity.transactionHash = event.transaction.hash
   entity.nowPrice = event.params.tokenNowPrice
   entity.currencyAddress = event.params.currencyAddress.toHexString()
+  entity.airdropRate = event.params.airdropRate
+  entity.sellAt = event.params.sellAt
   entity.save()
 
   let userMeMeTokenBalanceEntity = new UserMeMeTokenBalance(event.params.token.toHexString() + "_" + event.address.toHexString())

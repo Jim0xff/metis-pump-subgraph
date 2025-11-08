@@ -10,6 +10,7 @@ import {
   import { BigInt, Bytes } from "@graphprotocol/graph-ts";
   
   export function handleERC20Transfer(event: TransferEvent): void {
+    
     let fromBalanceEntity = UserMeMeTokenBalance.load(event.address.toHexString()+ "_" + event.params.from.toHexString())
 
     if(fromBalanceEntity == null){
@@ -50,6 +51,7 @@ import {
         toBalanceEntity.createTimestamp = event.block.timestamp
         toBalanceEntity.tokenAmount = BigInt.fromString("0")
     }
+    
     toBalanceEntity.tokenAmount = toBalanceEntity.tokenAmount.plus(event.params.value)
     toBalanceEntity.updateTimestamp = event.block.timestamp
     toBalanceEntity.save()

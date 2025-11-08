@@ -6,9 +6,9 @@ dataSources:
     name: TokenFactory
     network: mainnet
     source:
-      address: "0xe8385f3115f2aa17b1AB5B54508a41b834f7787b"
+      address: "0xE1eDE24167A7abbEEae3d362373f7937aEa8767a"
       abi: TokenFactory
-      startBlock: 1200000
+      startBlock: 6253416
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -23,7 +23,7 @@ dataSources:
         - name: TokenFactory
           file: ./abis/TokenFactory.json
       eventHandlers:
-        - event: TokenCreated(indexed address,string,string,indexed address,string,string,uint256,uint256,address)
+        - event: TokenCreated(indexed address,string,string,indexed address,string,string,uint256,uint256,address,uint256,uint256)
           handler: handleTokenCreated
         - event: TokenLiqudityAdded(indexed address,indexed address,indexed uint256,uint256)
           handler: handleTokenLiqudityAdded

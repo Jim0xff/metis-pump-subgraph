@@ -23,11 +23,6 @@
   },
   {
     "inputs": [],
-    "name": "ERC1167FailedCreateClone",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "FailedInnerCall",
     "type": "error"
   },
@@ -246,6 +241,18 @@
         "internalType": "address",
         "name": "currencyAddress",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "sellAt",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "airdropRate",
+        "type": "uint256"
       }
     ],
     "name": "TokenCreated",
@@ -400,6 +407,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "airdropContractAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -438,7 +458,7 @@
   },
   {
     "inputs": [],
-    "name": "claimFee",
+    "name": "claimLaunchFee",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -498,9 +518,24 @@
         "type": "string"
       },
       {
+        "internalType": "uint256",
+        "name": "currencyAmount",
+        "type": "uint256"
+      },
+      {
         "internalType": "address",
         "name": "currencyAddress",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "sellAt",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "airdropRate",
+        "type": "uint256"
       }
     ],
     "name": "createToken",
@@ -515,8 +550,136 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "enabledCurrency",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "fee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feeHandlerAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "currencyAddress",
+        "type": "address"
+      }
+    ],
+    "name": "fundingGoal",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCurrencyInAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currencyAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "getTokenOutAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "currencyAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currencyAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startTokenAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "getTokenOutAmountOnBondingCurve",
     "outputs": [
       {
         "internalType": "uint256",
@@ -538,6 +701,19 @@
     "name": "initialize",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "launchFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -588,19 +764,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_tokenAddress",
-        "type": "address"
-      }
-    ],
-    "name": "removeEnabledCurrency",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "tokenAddress",
         "type": "address"
       },
@@ -629,6 +792,24 @@
       }
     ],
     "name": "setBondingCurveMap",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "currencyAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "fundingGoal",
+        "type": "uint256"
+      }
+    ],
+    "name": "setFundingGoalMap",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
