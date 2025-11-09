@@ -33,7 +33,6 @@ services:
       - ./data/ipfs:/data/ipfs
   postgres:
     image: postgres:14
-    user: "999:999"
     ports:
       - '5432:5432'
     command:
