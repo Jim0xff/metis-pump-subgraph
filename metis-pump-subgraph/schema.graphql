@@ -20,6 +20,10 @@ type Token @entity{
   createTimestamp: BigInt!
   updateTimestamp: BigInt!
   transactionHash: Bytes!
+  volumeBondingCurveCurrencyAmount: BigInt
+  volumeSwapCurrencyAmount: BigInt
+  volumeBondingCurveAmount: BigInt
+  volumeSwapAmount: BigInt
 }
 
 type LpToken @entity{

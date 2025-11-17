@@ -39,6 +39,10 @@ export function handleTokenCreated(event: TokenCreatedEvent): void {
   entity.currencyAddress = event.params.currencyAddress.toHexString()
   entity.airdropRate = event.params.airdropRate
   entity.sellAt = event.params.sellAt
+  entity.volumeBondingCurveAmount = BigInt.fromString("0")
+  entity.volumeBondingCurveCurrencyAmount = BigInt.fromString("0")
+  entity.volumeSwapAmount = BigInt.fromString("0")
+  entity.volumeSwapCurrencyAmount = BigInt.fromString("0")
   entity.save()
 
   let userMeMeTokenBalanceEntity = new UserMeMeTokenBalance(event.params.token.toHexString() + "_" + event.address.toHexString())
@@ -104,6 +108,17 @@ export function handleBuyToken(event: BuyTokenEvent): void {
     tokenEntity.updateTimestamp = event.block.timestamp
     tokenEntity.transactionHash = event.transaction.hash
     tokenEntity.collateral = event.params.collateral
+    // volumeBondingCurveAmount
+    let oldVolumeBonding: BigInt = tokenEntity.volumeBondingCurveAmount
+    ? tokenEntity.volumeBondingCurveAmount!
+    : BigInt.fromI32(0);
+    tokenEntity.volumeBondingCurveAmount = oldVolumeBonding.plus(event.params.tokenAmount);
+
+    // volumeBondingCurveCurrencyAmount
+    let oldVolumeBondingCurrency: BigInt = tokenEntity.volumeBondingCurveCurrencyAmount
+     ? tokenEntity.volumeBondingCurveCurrencyAmount!
+    : BigInt.fromI32(0);
+    tokenEntity.volumeBondingCurveCurrencyAmount = oldVolumeBondingCurrency.plus(event.params.metisAmount);
     tokenEntity.save();
   }
 }
@@ -150,6 +165,16 @@ export function handleSellToken(event: SellTokenEvent): void {
     tokenEntity.updateTimestamp = event.block.timestamp
     tokenEntity.transactionHash = event.transaction.hash
     tokenEntity.collateral = event.params.collateral
+    let oldVolumeBonding: BigInt = tokenEntity.volumeBondingCurveAmount
+    ? tokenEntity.volumeBondingCurveAmount!
+    : BigInt.fromI32(0);
+    tokenEntity.volumeBondingCurveAmount = oldVolumeBonding.plus(event.params.tokenAmount);
+    
+    // volumeBondingCurveCurrencyAmount
+    let oldVolumeBondingCurrency: BigInt = tokenEntity.volumeBondingCurveCurrencyAmount
+    ? tokenEntity.volumeBondingCurveCurrencyAmount!
+    : BigInt.fromI32(0);
+    tokenEntity.volumeBondingCurveCurrencyAmount = oldVolumeBondingCurrency.plus(event.params.metisAmount);
     tokenEntity.save();
   }
 }

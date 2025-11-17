@@ -3,6 +3,7 @@ import {
   } from "../generated/NetswapPair/NetswapPair"
   import {
      LpToken,
+     Token,
      Transaction
   } from "../generated/schema"
   
@@ -87,6 +88,16 @@ import {
         tokenAmount = BigDecimal.fromString(tokenAmountIn.toString())
         currencyAmount = BigDecimal.fromString(currencyAmountOut.toString())
     }
+    let tokenEntity = Token.load(lpToken.token)
+    if(tokenEntity != null){
+        tokenEntity.blockNumber = event.block.number
+        tokenEntity.updateTimestamp = event.block.timestamp
+        tokenEntity.transactionHash = event.transaction.hash
+        tokenEntity.volumeSwapAmount = transactionEntity.tokenAmount
+        tokenEntity.volumeSwapCurrencyAmount = transactionEntity.metisAmount
+        tokenEntity.save();
+      }
+
     const tenToEighteen:BigDecimal = BigDecimal.fromString(Math.pow(10, 18).toString());
     let priceC:BigInt = BigInt.fromString('0');
     if(!tokenAmount.equals(BigDecimal.fromString('0'))){
