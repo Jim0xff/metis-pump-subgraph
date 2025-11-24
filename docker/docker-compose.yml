@@ -24,6 +24,7 @@ services:
       BLOCK_INGESTOR: "index_node"
       node_id: "index_node"
     command:
+      - graph-node
       - --pruning=true
       - --prune-history    
     volumes:
