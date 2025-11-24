@@ -17,3 +17,10 @@
 [[deployment.rule]]
   shard = "primary"
   indexers = [ "index_node" ]
+
+[store]
+  [[store.pruning]]
+    shard = "primary"
+    prune_history = true
+    enabled = true
+    window = 30000
