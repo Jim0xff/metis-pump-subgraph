@@ -2,6 +2,7 @@
   connection = "postgresql://postgres:let-me-in@postgres/subgraph?sslmode=prefer"
   weight = 1
   pool_size = 10
+  pruning = "window:100000"
 
 [chains]
   ingestor = "index_node"
@@ -17,10 +18,3 @@
 [[deployment.rule]]
   shard = "primary"
   indexers = [ "index_node" ]
-
-[store]
-  [[store.pruning]]
-    shard = "primary"
-    prune_history = true
-    enabled = true
-    window = 30000
