@@ -23,6 +23,9 @@ services:
       GRAPH_NODE_CONFIG: './node.toml'
       BLOCK_INGESTOR: "index_node"
       node_id: "index_node"
+    command:
+      - --pruning=true
+      - --prune-history    
     volumes:
       - ./node.toml:/node.toml
   ipfs:
@@ -41,7 +44,7 @@ services:
         "-cshared_preload_libraries=pg_stat_statements",
         "-cwal_level=logical",
         "-clogging_collector=on",
-        "-clog_statement=all",
+        "-clog_statement=none",
         "-clog_directory=/var/lib/postgresql/data",
         "-clog_filename=postgresql.log"
       ]
