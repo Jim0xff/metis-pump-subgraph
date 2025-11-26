@@ -17,7 +17,8 @@ services:
       ipfs: 'ipfs:5001'
       # ethereum: 'mainnet:http://host.docker.internal:8545'
       #ethereum: 'https://metis-pokt.nodies.app'
-      ethereum: 'mainnet:https://sepolia.metisdevops.link'
+      # ethereum: 'mainnet:https://sepolia.metisdevops.link'
+      ethereum: 'mainnet:https://andromeda.metis.io/?owner=1088'
       # ethereum: 'mainnet:https://sepolia.infura.io/v3/11a6f3878d804145b1276f405300e457'
       GRAPH_LOG: debug
       GRAPH_NODE_CONFIG: './node.toml'
@@ -30,7 +31,7 @@ services:
     ports:
       - '5001:5001'
     volumes:
-      - ./data/ipfs:/data/ipfs
+      - /mnt/volume/ipfs:/data/ipfs
   postgres:
     image: postgres:14
     ports:
@@ -52,5 +53,5 @@ services:
       PGDATA: "/var/lib/postgresql/data"
       POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
     volumes: 
-      - ./data/postgres:/var/lib/postgresql/data
+      - /mnt/volume/postgres:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql

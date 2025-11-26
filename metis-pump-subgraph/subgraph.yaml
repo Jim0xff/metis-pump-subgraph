@@ -6,9 +6,9 @@ dataSources:
     name: TokenFactory
     network: mainnet
     source:
-      address: "0xE1eDE24167A7abbEEae3d362373f7937aEa8767a"
+      address: "0x1D61D1a1377b15eD8e95AD90d48b82873413a1d6"
       abi: TokenFactory
-      startBlock: 6253416
+      startBlock: 21698874
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -37,7 +37,7 @@ dataSources:
     network: mainnet
     source:
       abi: Token
-      startBlock: 1200000
+      startBlock: 21698874
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -57,7 +57,7 @@ dataSources:
     network: mainnet
     source:
       abi: NetswapPair
-      startBlock: 1200000
+      startBlock: 21698874
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

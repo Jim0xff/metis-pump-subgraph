@@ -10,7 +10,7 @@
     shard = "primary"
     [[chains.mainnet.provider]]
       label = "mainnet"
-      url = "https://sepolia.metisdevops.link"
+      url = "https://andromeda.metis.io/?owner=1088"
       features = ["archive","traces"]
       transport = "rpc"
 
